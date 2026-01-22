@@ -1,10 +1,236 @@
+import React, { useState } from "react";
+import ReactMarkdown from "react-markdown";
+import {
+  PenTool,
+  BookOpen,
+  Share2,
+  Sparkles,
+  Download,
+  Copy,
+  History,
+  LayoutDashboard,
+  Check,
+  Zap,
+} from "lucide-react";
 import { generateContent } from "./services/aiService";
+
 export default function App() {
+  // --- STATE ---
+  const [contentType, setContentType] = useState("blog");
+  const [topic, setTopic] = useState("");
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [generatedContent, setGeneratedContent] = useState("");
+  const [copied, setCopied] = useState(false);
+
+  // --- LOGIC ---
+  const handleGenerate = async () => {
+    if (!topic) return;
+    setIsGenerating(true);
+    setGeneratedContent("");
+
+    try {
+      const result = await generateContent(topic, contentType);
+      setGeneratedContent(result);
+    } catch (error) {
+      setGeneratedContent(
+        "### ⚠️ Connection Error\n\nI couldn't reach the AI. Please ensure your `.env` file contains a valid `VITE_GEMINI_API_KEY` and that you have restarted your dev server."
+      );
+      console.error(error);
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(generatedContent);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-900">
-      <h1 className="text-4xl font-bold text-blue-500">
-        LexiFlow AI is Live 🚀
-      </h1>
+    <div className="flex h-screen bg-slate-50 font-sans text-slate-900">
+      {/* SIDEBAR */}
+      <aside className="w-72 bg-slate-900 text-white flex flex-col p-6 hidden lg:flex">
+        <div className="flex items-center gap-3 mb-12">
+          <div className="bg-indigo-600 p-2 rounded-xl shadow-lg shadow-indigo-500/20">
+            <Zap size={24} className="fill-white text-white" />
+          </div>
+          <h1 className="text-xl font-bold tracking-tight">LexiFlow AI</h1>
+        </div>
+
+        <nav className="space-y-2 flex-1">
+          <button className="flex items-center gap-3 w-full p-3 rounded-xl bg-indigo-600/10 text-indigo-400 border border-indigo-500/20">
+            <LayoutDashboard size={20} /> Dashboard
+          </button>
+          <button className="flex items-center gap-3 w-full p-3 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition">
+            <History size={20} /> Past Projects
+          </button>
+        </nav>
+
+        <div className="mt-auto p-5 bg-slate-800/40 rounded-2xl border border-slate-700/50">
+          <div className="flex justify-between items-end mb-2">
+            <p className="text-xs text-slate-400 uppercase font-bold tracking-wider">
+              Usage Plan
+            </p>
+            <p className="text-[10px] text-indigo-400 font-mono">Free Tier</p>
+          </div>
+          <div className="h-1.5 w-full bg-slate-700 rounded-full overflow-hidden">
+            <div className="h-full bg-indigo-500 w-2/3"></div>
+          </div>
+          <p className="text-[11px] mt-3 text-slate-500 leading-tight">
+            API active: Gemini-1.5-Flash
+          </p>
+        </div>
+      </aside>
+
+      {/* MAIN CONTENT */}
+      <main className="flex-1 flex flex-col md:flex-row overflow-hidden">
+        {/* INPUT PANEL */}
+        <section className="w-full md:w-[400px] border-r border-slate-200 bg-white p-8 overflow-y-auto">
+          <header className="mb-10">
+            <h2 className="text-2xl font-bold text-slate-800 tracking-tight">
+              Design Content
+            </h2>
+            <p className="text-slate-500 text-sm mt-1">
+              Configure your AI generation parameters.
+            </p>
+          </header>
+
+          <div className="space-y-8">
+            {/* Selector */}
+            <div>
+              <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">
+                Output Format
+              </label>
+              <div className="grid grid-cols-3 gap-3">
+                {[
+                  { id: "blog", icon: <PenTool size={18} />, label: "Blog" },
+                  { id: "ebook", icon: <BookOpen size={18} />, label: "eBook" },
+                  { id: "social", icon: <Share2 size={18} />, label: "Social" },
+                ].map((type) => (
+                  <button
+                    key={type.id}
+                    onClick={() => setContentType(type.id)}
+                    className={`flex flex-col items-center gap-2 p-4 rounded-2xl border-2 transition-all ${
+                      contentType === type.id
+                        ? "border-indigo-600 bg-indigo-50 text-indigo-600 shadow-sm"
+                        : "border-slate-50 bg-slate-50 text-slate-400 hover:border-slate-200 hover:bg-slate-100"
+                    }`}
+                  >
+                    {type.icon}
+                    <span className="text-[11px] font-bold uppercase">
+                      {type.label}
+                    </span>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Prompt Input */}
+            <div>
+              <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">
+                Describe Topic
+              </label>
+              <textarea
+                rows="6"
+                className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-4 focus:ring-indigo-500/5 focus:border-indigo-500 outline-none transition-all resize-none text-slate-700 placeholder:text-slate-400"
+                placeholder="e.g. 'Write a 500-word blog post about the impact of React in 2026...'"
+                value={topic}
+                onChange={(e) => setTopic(e.target.value)}
+              />
+            </div>
+
+            <button
+              onClick={handleGenerate}
+              disabled={isGenerating || !topic}
+              className="group relative w-full bg-slate-900 hover:bg-indigo-600 disabled:bg-slate-200 text-white font-bold py-4 rounded-2xl transition-all duration-300 flex items-center justify-center gap-3 shadow-xl shadow-slate-900/10 active:scale-[0.98]"
+            >
+              {isGenerating ? (
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-white rounded-full animate-bounce"></div>
+                  <div className="w-2 h-2 bg-white rounded-full animate-bounce [animation-delay:-.3s]"></div>
+                  <div className="w-2 h-2 bg-white rounded-full animate-bounce [animation-delay:-.5s]"></div>
+                </div>
+              ) : (
+                <>
+                  Generate with AI
+                  <Sparkles
+                    size={18}
+                    className="group-hover:rotate-12 transition-transform"
+                  />
+                </>
+              )}
+            </button>
+          </div>
+        </section>
+
+        {/* OUTPUT PANEL */}
+        <section className="flex-1 bg-slate-50 p-6 md:p-12 overflow-y-auto relative">
+          <div className="max-w-3xl mx-auto">
+            <div className="flex justify-between items-center mb-8">
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 bg-indigo-500 rounded-full"></div>
+                <span className="text-xs font-bold text-slate-500 uppercase tracking-widest">
+                  Live Preview
+                </span>
+              </div>
+
+              <div className="flex gap-3">
+                <button
+                  onClick={copyToClipboard}
+                  disabled={!generatedContent}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all border ${
+                    copied
+                      ? "text-emerald-600 bg-emerald-50 border-emerald-200"
+                      : "text-slate-600 bg-white border-slate-200 hover:border-indigo-200 hover:text-indigo-600 shadow-sm disabled:opacity-50"
+                  }`}
+                >
+                  {copied ? <Check size={16} /> : <Copy size={16} />}
+                  {copied ? "Copied" : "Copy Text"}
+                </button>
+              </div>
+            </div>
+
+            {/* Paper Container */}
+            <div className="bg-white min-h-[750px] rounded-[32px] shadow-2xl shadow-slate-200/50 border border-slate-200/60 p-10 md:p-16 relative overflow-hidden">
+              {/* Subtle Paper Grid Overlay */}
+              <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[radial-gradient(#000_1px,transparent_1px)] [background-size:20px_20px]"></div>
+
+              <div className="relative z-10">
+                {isGenerating ? (
+                  <div className="space-y-6">
+                    <div className="h-10 bg-slate-100 rounded-lg w-2/3 animate-pulse"></div>
+                    <div className="space-y-3 pt-4">
+                      <div className="h-4 bg-slate-50 rounded w-full animate-pulse"></div>
+                      <div className="h-4 bg-slate-50 rounded w-[95%] animate-pulse"></div>
+                      <div className="h-4 bg-slate-50 rounded w-[98%] animate-pulse"></div>
+                      <div className="h-4 bg-slate-50 rounded w-[92%] animate-pulse"></div>
+                    </div>
+                  </div>
+                ) : generatedContent ? (
+                  <article className="prose prose-slate max-w-none prose-headings:font-bold prose-h1:text-3xl prose-p:text-slate-600 prose-p:leading-relaxed prose-strong:text-indigo-600">
+                    <ReactMarkdown>{generatedContent}</ReactMarkdown>
+                  </article>
+                ) : (
+                  <div className="h-full flex flex-col items-center justify-center text-slate-300 space-y-6 py-40">
+                    <div className="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center border border-slate-100 shadow-inner">
+                      <PenTool size={32} className="text-slate-200" />
+                    </div>
+                    <div className="text-center">
+                      <p className="font-bold text-slate-400">
+                        Canvas is empty
+                      </p>
+                      <p className="text-sm text-slate-300">
+                        Enter a topic and click generate to start writing.
+                      </p>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
     </div>
   );
 }
