@@ -50,7 +50,7 @@ export default function App() {
   return (
     <div className="flex h-screen bg-slate-50 font-sans text-slate-900">
       {/* SIDEBAR */}
-      <aside className="w-72 bg-slate-900 text-white flex flex-col p-6 hidden lg:flex">
+      <aside className="w-72 bg-slate-900 text-white flex-col p-6 hidden lg:flex">
         <div className="flex items-center gap-3 mb-12">
           <div className="bg-indigo-600 p-2 rounded-xl shadow-lg shadow-indigo-500/20">
             <Zap size={24} className="fill-white text-white" />
