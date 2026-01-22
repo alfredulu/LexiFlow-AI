@@ -6,7 +6,7 @@ const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY);
 export const generateContent = async (topic, contentType) => {
   try {
     // 2. Select the Gemini Pro model
-    const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
     // 3. Define professional personas based on the content type
     const prompts = {
