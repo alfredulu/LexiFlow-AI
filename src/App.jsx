@@ -16,13 +16,14 @@ import { generateContent } from "./services/aiService";
 
 export default function App() {
   // --- STATE ---
+
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [contentType, setContentType] = useState("blog");
   const [topic, setTopic] = useState("");
-  const [isSidebarOpen, setIsSidebarOpen, isGenerating, setIsGenerating] =
-    useState(false);
+  const [isGenerating, setIsGenerating] = useState(false); // <--- The culprit!
   const [generatedContent, setGeneratedContent] = useState("");
-  const [tone, setTone] = useState("professional");
   const [copied, setCopied] = useState(false);
+  const [tone, setTone] = useState("professional");
 
   // --- LOGIC ---
   const handleGenerate = async () => {
