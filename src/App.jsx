@@ -18,8 +18,10 @@ export default function App() {
   // --- STATE ---
   const [contentType, setContentType] = useState("blog");
   const [topic, setTopic] = useState("");
-  const [isGenerating, setIsGenerating] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen, isGenerating, setIsGenerating] =
+    useState(false);
   const [generatedContent, setGeneratedContent] = useState("");
+  const [tone, setTone] = useState("professional");
   const [copied, setCopied] = useState(false);
 
   // --- LOGIC ---
@@ -50,12 +52,29 @@ export default function App() {
   return (
     <div className="flex h-screen bg-slate-50 font-sans text-slate-900">
       {/* SIDEBAR */}
-      <aside className="w-72 bg-slate-900 text-white flex-col p-6 hidden lg:flex">
-        <div className="flex items-center gap-3 mb-12">
-          <div className="bg-indigo-600 p-2 rounded-xl shadow-lg shadow-indigo-500/20">
-            <Zap size={24} className="fill-white text-white" />
+      {/* SIDEBAR */}
+      <aside
+        className={`
+        ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"} 
+        lg:translate-x-0 fixed lg:relative z-50 w-72 bg-slate-900 text-white 
+        flex flex-col p-6 h-full transition-transform duration-300 ease-in-out lg:flex
+      `}
+      >
+        <div className="flex items-center justify-between mb-12">
+          <div className="flex items-center gap-3">
+            <div className="bg-indigo-600 p-2 rounded-xl shadow-lg shadow-indigo-500/20">
+              <Zap size={24} className="fill-white text-white" />
+            </div>
+            <h1 className="text-xl font-bold tracking-tight">LexiFlow AI</h1>
           </div>
-          <h1 className="text-xl font-bold tracking-tight">LexiFlow AI</h1>
+
+          {/* Close button - only visible on Mobile */}
+          <button
+            onClick={() => setIsSidebarOpen(false)}
+            className="lg:hidden text-slate-400 hover:text-white"
+          >
+            <Check size={24} />
+          </button>
         </div>
 
         <nav className="space-y-2 flex-1">
@@ -85,6 +104,16 @@ export default function App() {
 
       {/* MAIN CONTENT */}
       <main className="flex-1 flex flex-col md:flex-row overflow-hidden">
+        {/* Mobile Header Toggle - ONLY SHOWS ON MOBILE */}
+        <div className="lg:hidden flex items-center justify-between p-4 bg-white border-b border-slate-200 w-full">
+          <h1 className="font-bold text-slate-800">LexiFlow AI</h1>
+          <button
+            onClick={() => setIsSidebarOpen(true)}
+            className="p-2 bg-slate-100 rounded-lg text-slate-600"
+          >
+            <LayoutDashboard size={20} />
+          </button>
+        </div>
         {/* INPUT PANEL */}
         <section className="w-full md:w-[400px] border-r border-slate-200 bg-white p-8 overflow-y-auto">
           <header className="mb-10">
