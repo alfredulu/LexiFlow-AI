@@ -89,7 +89,6 @@ export default function App() {
   return (
     <div className="flex h-screen bg-slate-50 font-sans text-slate-900">
       {/* SIDEBAR */}
-      {/* SIDEBAR */}
       <aside
         className={`
         ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"} 
@@ -104,8 +103,6 @@ export default function App() {
             </div>
             <h1 className="text-xl font-bold tracking-tight">LexiFlow AI</h1>
           </div>
-
-          {/* Close button - X icon is better for closing */}
           <button
             onClick={() => setIsSidebarOpen(false)}
             className="lg:hidden text-slate-400 hover:text-white"
@@ -134,7 +131,7 @@ export default function App() {
                       setGeneratedContent(item.content);
                       setTopic(item.fullTopic);
                       setContentType(item.type);
-                      setIsSidebarOpen(false); // Closes sidebar on mobile when you pick one!
+                      setIsSidebarOpen(false); //
                     }}
                     className="flex flex-col gap-1 w-full p-3 rounded-xl text-left text-slate-400 hover:text-white hover:bg-slate-800 transition border border-transparent hover:border-slate-700 pr-10"
                   >
@@ -205,7 +202,7 @@ export default function App() {
         <div className="lg:hidden flex items-center justify-between p-4 bg-white border-b border-slate-200 w-full">
           <h1 className="font-bold text-slate-800">LexiFlow AI</h1>
           <button
-            onClick={() => setIsSidebarOpen(!isSidebarOpen)} // <--- This toggles between true/false
+            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
             className="p-2 bg-slate-100 rounded-lg text-slate-600 active:bg-slate-200"
           >
             <LayoutDashboard size={20} />
