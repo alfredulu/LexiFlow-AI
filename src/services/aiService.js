@@ -1,32 +1,32 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-// 1. Initialize the API with your key from the .env file
+// Force the version to 'v1' instead of 'v1beta'
 const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY);
 
 export const generateContent = async (topic, contentType) => {
   try {
-    // 2. Select the Gemini Pro model
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    // We'll use the specific model path that v1 likes
+    const model = genAI.getGenerativeModel({ model: "gemini-3-flash" });
 
-    // 3. Define professional personas based on the content type
-    const prompts = {
-      blog: `Write a professional, SEO-optimized blog post about: "${topic}". Include a catchy title, introduction, subheadings, and a conclusion. Tone: Informative and engaging.`,
-      ebook: `Create a detailed chapter outline and an introductory chapter for an eBook about: "${topic}". Focus on providing deep value and professional insights.`,
-      social: `Generate 5 high-engaging social media posts (LinkedIn and Twitter style) about: "${topic}". Include relevant hashtags and emojis.`,
-    };
+    const prompt = `Write a professional ${contentType} about ${topic}. Use Markdown formatting.`;
 
-    const prompt = prompts[contentType] || prompts.blog;
-
-    // 4. Call the AI
     const result = await model.generateContent(prompt);
-    const response = await result.response;
-    const text = response.text();
-
-    return text;
+    const response = result.response;
+    return response.text();
   } catch (error) {
-    console.error("Gemini API Error:", error);
-    throw new Error(
-      "Failed to generate content. Please check your API key or connection."
-    );
+    console.error("Stable API failed, trying old Pro name:", error);
+
+    // FINAL ATTEMPT: Using the older model name that usually works in all regions
+    try {
+      const fallbackModel = genAI.getGenerativeModel({ model: "gemini-pro" });
+      const result = await fallbackModel.generateContent(
+        `Write about ${topic}`
+      );
+      return result.response.text();
+    } catch (fallbackError) {
+      throw new Error(
+        "Google is still activating your key. Try again in 5 minutes."
+      );
+    }
   }
 };

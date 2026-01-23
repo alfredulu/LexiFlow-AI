@@ -20,13 +20,14 @@ export default function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [contentType, setContentType] = useState("blog");
   const [topic, setTopic] = useState("");
-  const [isGenerating, setIsGenerating] = useState(false); // <--- The culprit!
+  const [isGenerating, setIsGenerating] = useState(false);
   const [generatedContent, setGeneratedContent] = useState("");
   const [copied, setCopied] = useState(false);
   const [tone, setTone] = useState("professional");
 
   // --- LOGIC ---
   const handleGenerate = async () => {
+    console.log("Checking API Key:", import.meta.env.VITE_GEMINI_API_KEY); // <--- ADD THIS
     if (!topic) return;
     setIsGenerating(true);
     setGeneratedContent("");
