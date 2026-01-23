@@ -89,6 +89,7 @@ export default function App() {
   return (
     <div className="flex h-screen bg-slate-50 font-sans text-slate-900">
       {/* SIDEBAR */}
+      {/* SIDEBAR */}
       <aside
         className={`
         ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"} 
@@ -104,12 +105,14 @@ export default function App() {
             <h1 className="text-xl font-bold tracking-tight">LexiFlow AI</h1>
           </div>
 
-          {/* Close button - only visible on Mobile */}
+          {/* Close button - X icon is better for closing */}
           <button
             onClick={() => setIsSidebarOpen(false)}
             className="lg:hidden text-slate-400 hover:text-white"
           >
-            <Check size={24} />
+            <div className="p-2 border border-slate-700 rounded-lg">
+              <span className="text-xl font-bold">✕</span>
+            </div>
           </button>
         </div>
 
@@ -123,26 +126,48 @@ export default function App() {
               No history yet...
             </p>
           ) : (
-            history.map((item) => (
-              <button
-                key={item.id}
-                onClick={() => {
-                  setGeneratedContent(item.content);
-                  setTopic(item.fullTopic);
-                  setContentType(item.type);
-                }}
-                className="flex flex-col gap-1 w-full p-3 rounded-xl text-left text-slate-400 hover:text-white hover:bg-slate-800 transition border border-transparent hover:border-slate-700"
-              >
-                <span className="text-xs font-bold truncate text-indigo-400">
-                  {item.topic}
-                </span>
-                <span className="text-[10px] opacity-50">
-                  {item.date} • {item.type}
-                </span>
-              </button>
-            ))
+            <div className="space-y-2">
+              {history.map((item) => (
+                <div key={item.id} className="group relative">
+                  <button
+                    onClick={() => {
+                      setGeneratedContent(item.content);
+                      setTopic(item.fullTopic);
+                      setContentType(item.type);
+                      setIsSidebarOpen(false); // Closes sidebar on mobile when you pick one!
+                    }}
+                    className="flex flex-col gap-1 w-full p-3 rounded-xl text-left text-slate-400 hover:text-white hover:bg-slate-800 transition border border-transparent hover:border-slate-700 pr-10"
+                  >
+                    <span className="text-xs font-bold truncate text-indigo-400">
+                      {item.topic}
+                    </span>
+                    <span className="text-[10px] opacity-50">
+                      {item.date} • {item.type}
+                    </span>
+                  </button>
+
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      const newHistory = history.filter(
+                        (h) => h.id !== item.id
+                      );
+                      setHistory(newHistory);
+                      localStorage.setItem(
+                        "lexiflow_history",
+                        JSON.stringify(newHistory)
+                      );
+                    }}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 p-2 text-slate-600 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity"
+                  >
+                    <Trash2 size={14} />
+                  </button>
+                </div>
+              ))}
+            </div>
           )}
         </nav>
+
         {history.length > 0 && (
           <button
             onClick={() => {
