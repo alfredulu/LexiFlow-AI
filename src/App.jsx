@@ -13,6 +13,7 @@ import {
   Zap,
 } from "lucide-react";
 import { generateContent } from "./services/aiService";
+import { jsPDF } from "jspdf";
 
 export default function App() {
   // --- STATE ---
@@ -48,6 +49,24 @@ export default function App() {
     navigator.clipboard.writeText(generatedContent);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
+  };
+
+  const downloadAsPDF = () => {
+    if (!generatedContent) return;
+    const doc = new jsPDF();
+    const margin = 15;
+    const width = doc.internal.pageSize.getWidth() - margin * 2;
+
+    // Clean text for PDF (Removes markdown characters)
+    const cleanText = generatedContent.replace(/[#*`]/g, "");
+    const lines = doc.splitTextToSize(cleanText, width);
+
+    doc.setFont("helvetica", "bold");
+    doc.text(`LexiFlow AI: ${contentType.toUpperCase()}`, margin, 15);
+    doc.setFontSize(11);
+    doc.setFont("helvetica", "normal");
+    doc.text(lines, margin, 25);
+    doc.save(`LexiFlow-${Date.now()}.pdf`);
   };
 
   return (
@@ -104,7 +123,7 @@ export default function App() {
       </aside>
 
       {/* MAIN CONTENT */}
-      <main className="flex-1 flex flex-col md:flex-row overflow-hidden">
+      <main className="flex-1 flex flex-col lg:flex-row overflow-hidden h-full">
         {/* Mobile Header Toggle - ONLY SHOWS ON MOBILE */}
         <div className="lg:hidden flex items-center justify-between p-4 bg-white border-b border-slate-200 w-full">
           <h1 className="font-bold text-slate-800">LexiFlow AI</h1>
@@ -116,7 +135,7 @@ export default function App() {
           </button>
         </div>
         {/* INPUT PANEL */}
-        <section className="w-full md:w-[400px] border-r border-slate-200 bg-white p-8 overflow-y-auto">
+        <section className="w-full lg:w-[400px] border-r border-slate-200 bg-white p-8 overflow-y-auto h-[60vh] lg:h-full shrink-0">
           <header className="mb-10">
             <h2 className="text-2xl font-bold text-slate-800 tracking-tight">
               Design Content
@@ -195,7 +214,7 @@ export default function App() {
         </section>
 
         {/* OUTPUT PANEL */}
-        <section className="flex-1 bg-slate-50 p-6 md:p-12 overflow-y-auto relative">
+        <section className="w-full lg:flex-1 bg-slate-50 p-6 md:p-12 overflow-y-auto relative h-[40vh] lg:h-full">
           <div className="max-w-3xl mx-auto">
             <div className="flex justify-between items-center mb-8">
               <div className="flex items-center gap-2">
@@ -206,6 +225,7 @@ export default function App() {
               </div>
 
               <div className="flex gap-3">
+                {/* Existing Copy Button */}
                 <button
                   onClick={copyToClipboard}
                   disabled={!generatedContent}
@@ -217,6 +237,16 @@ export default function App() {
                 >
                   {copied ? <Check size={16} /> : <Copy size={16} />}
                   {copied ? "Copied" : "Copy Text"}
+                </button>
+
+                {/* New PDF Button added right here */}
+                <button
+                  onClick={downloadAsPDF}
+                  disabled={!generatedContent}
+                  className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-xl text-sm font-bold hover:bg-indigo-700 disabled:bg-slate-200 transition-all shadow-md shadow-indigo-200"
+                >
+                  <Download size={16} />
+                  Download PDF
                 </button>
               </div>
             </div>
