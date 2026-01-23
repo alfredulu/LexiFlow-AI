@@ -25,6 +25,10 @@ export default function App() {
   const [generatedContent, setGeneratedContent] = useState("");
   const [copied, setCopied] = useState(false);
   const [tone, setTone] = useState("professional");
+  const [history, setHistory] = useState(() => {
+    const saved = localStorage.getItem("lexiflow_history");
+    return saved ? JSON.parse(saved) : [];
+  });
 
   // --- LOGIC ---
   const handleGenerate = async () => {
@@ -35,6 +39,19 @@ export default function App() {
     try {
       const result = await generateContent(topic, contentType);
       setGeneratedContent(result);
+
+      const newItem = {
+        id: Date.now(),
+        topic: topic.substring(0, 30) + "...", // Short version for the sidebar
+        fullTopic: topic,
+        content: result,
+        type: contentType,
+        date: new Date().toLocaleDateString(),
+      };
+
+      const updatedHistory = [newItem, ...history].slice(0, 10); // Keep last 10
+      setHistory(updatedHistory);
+      localStorage.setItem("lexiflow_history", JSON.stringify(updatedHistory));
     } catch (error) {
       setGeneratedContent(
         "### ⚠️ Connection Error\n\nI couldn't reach the AI. Please ensure your `.env` file contains a valid `VITE_GEMINI_API_KEY` and that you have restarted your dev server."
@@ -95,13 +112,35 @@ export default function App() {
           </button>
         </div>
 
-        <nav className="space-y-2 flex-1">
-          <button className="flex items-center gap-3 w-full p-3 rounded-xl bg-indigo-600/10 text-indigo-400 border border-indigo-500/20">
-            <LayoutDashboard size={20} /> Dashboard
-          </button>
-          <button className="flex items-center gap-3 w-full p-3 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition">
-            <History size={20} /> Past Projects
-          </button>
+        <nav className="space-y-4 flex-1 overflow-y-auto mt-4">
+          <p className="text-[10px] text-slate-500 uppercase font-bold tracking-widest px-3">
+            Recent Generations
+          </p>
+
+          {history.length === 0 ? (
+            <p className="text-xs text-slate-600 px-3 italic">
+              No history yet...
+            </p>
+          ) : (
+            history.map((item) => (
+              <button
+                key={item.id}
+                onClick={() => {
+                  setGeneratedContent(item.content);
+                  setTopic(item.fullTopic);
+                  setContentType(item.type);
+                }}
+                className="flex flex-col gap-1 w-full p-3 rounded-xl text-left text-slate-400 hover:text-white hover:bg-slate-800 transition border border-transparent hover:border-slate-700"
+              >
+                <span className="text-xs font-bold truncate text-indigo-400">
+                  {item.topic}
+                </span>
+                <span className="text-[10px] opacity-50">
+                  {item.date} • {item.type}
+                </span>
+              </button>
+            ))
+          )}
         </nav>
 
         <div className="mt-auto p-5 bg-slate-800/40 rounded-2xl border border-slate-700/50">
@@ -122,7 +161,7 @@ export default function App() {
 
       {/* MAIN CONTENT */}
       <main className="flex-1 flex flex-col lg:flex-row overflow-hidden h-full">
-        {/* Mobile Header Toggle - ONLY SHOWS ON MOBILE */}
+        {/* Mobile Header Toggle - ONLY VISIBLE ON MOBILE */}
         <div className="lg:hidden flex items-center justify-between p-4 bg-white border-b border-slate-200 w-full">
           <h1 className="font-bold text-slate-800">LexiFlow AI</h1>
           <button
