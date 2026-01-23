@@ -57,7 +57,6 @@ export default function App() {
     const margin = 15;
     const width = doc.internal.pageSize.getWidth() - margin * 2;
 
-    // Clean text for PDF (Removes markdown characters)
     const cleanText = generatedContent.replace(/[#*`]/g, "");
     const lines = doc.splitTextToSize(cleanText, width);
 
@@ -71,7 +70,6 @@ export default function App() {
 
   return (
     <div className="flex h-screen bg-slate-50 font-sans text-slate-900">
-      {/* SIDEBAR */}
       {/* SIDEBAR */}
       <aside
         className={`
@@ -134,7 +132,7 @@ export default function App() {
             <LayoutDashboard size={20} />
           </button>
         </div>
-        {/* INPUT PANEL */}
+
         {/* INPUT PANEL */}
         <section className="w-full lg:w-[400px] border-r border-slate-200 bg-white p-8 overflow-y-auto h-[50%] lg:h-full shrink-0">
           <header className="mb-10">
@@ -147,7 +145,6 @@ export default function App() {
           </header>
 
           <div className="space-y-8">
-            {/* Selector */}
             <div>
               <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">
                 Output Format
@@ -226,7 +223,6 @@ export default function App() {
               </div>
 
               <div className="flex gap-3">
-                {/* Existing Copy Button */}
                 <button
                   onClick={copyToClipboard}
                   disabled={!generatedContent}
@@ -236,7 +232,6 @@ export default function App() {
                       : "text-slate-600 bg-white border-slate-200 hover:border-indigo-200 hover:text-indigo-600 shadow-sm disabled:opacity-50"
                   }`}
                 >
-                  {/* The icon will now bounce when copied! */}
                   {copied ? (
                     <Check
                       size={16}
@@ -248,7 +243,6 @@ export default function App() {
                   {copied ? "Copied!" : "Copy Text"}
                 </button>
 
-                {/* New PDF Button added right here */}
                 <button
                   onClick={downloadAsPDF}
                   disabled={!generatedContent}
@@ -262,7 +256,6 @@ export default function App() {
 
             {/* Paper Container */}
             <div className="bg-white min-h-[400px] lg:min-h-[750px] rounded-[32px] shadow-2xl shadow-slate-200/50 border border-slate-200/60 p-6 md:p-16 relative overflow-hidden">
-              {/* Subtle Paper Grid Overlay */}
               <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[radial-gradient(#000_1px,transparent_1px)] [background-size:20px_20px]"></div>
 
               <div className="relative z-10">
