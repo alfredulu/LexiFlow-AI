@@ -27,7 +27,6 @@ export default function App() {
 
   // --- LOGIC ---
   const handleGenerate = async () => {
-    console.log("Checking API Key:", import.meta.env.VITE_GEMINI_API_KEY); // <--- ADD THIS
     if (!topic) return;
     setIsGenerating(true);
     setGeneratedContent("");
@@ -99,7 +98,7 @@ export default function App() {
             <div className="h-full bg-indigo-500 w-2/3"></div>
           </div>
           <p className="text-[11px] mt-3 text-slate-500 leading-tight">
-            API active: Gemini-1.5-Flash
+            API active: Gemini-2.5-Flash
           </p>
         </div>
       </aside>
