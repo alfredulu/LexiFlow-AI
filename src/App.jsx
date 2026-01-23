@@ -135,7 +135,8 @@ export default function App() {
           </button>
         </div>
         {/* INPUT PANEL */}
-        <section className="w-full lg:w-[400px] border-r border-slate-200 bg-white p-8 overflow-y-auto h-[60vh] lg:h-full shrink-0">
+        {/* INPUT PANEL */}
+        <section className="w-full lg:w-[400px] border-r border-slate-200 bg-white p-8 overflow-y-auto h-[50%] lg:h-full shrink-0">
           <header className="mb-10">
             <h2 className="text-2xl font-bold text-slate-800 tracking-tight">
               Design Content
@@ -214,7 +215,8 @@ export default function App() {
         </section>
 
         {/* OUTPUT PANEL */}
-        <section className="w-full lg:flex-1 bg-slate-50 p-6 md:p-12 overflow-y-auto relative h-[40vh] lg:h-full">
+        {/* OUTPUT PANEL */}
+        <section className="flex-1 bg-slate-50 p-6 md:p-12 overflow-y-auto relative h-[50%] lg:h-full">
           <div className="max-w-3xl mx-auto">
             <div className="flex justify-between items-center mb-8">
               <div className="flex items-center gap-2">
