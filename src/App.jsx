@@ -215,7 +215,6 @@ export default function App() {
         </section>
 
         {/* OUTPUT PANEL */}
-        {/* OUTPUT PANEL */}
         <section className="flex-1 bg-slate-50 p-6 md:p-12 overflow-y-auto relative h-[50%] lg:h-full">
           <div className="max-w-3xl mx-auto">
             <div className="flex justify-between items-center mb-8">
@@ -231,14 +230,22 @@ export default function App() {
                 <button
                   onClick={copyToClipboard}
                   disabled={!generatedContent}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all border ${
+                  className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all duration-500 border ${
                     copied
-                      ? "text-emerald-600 bg-emerald-50 border-emerald-200"
+                      ? "text-emerald-600 bg-emerald-50 border-emerald-400 shadow-[0_0_20px_rgba(16,185,129,0.4)] scale-105 ring-2 ring-emerald-500/30"
                       : "text-slate-600 bg-white border-slate-200 hover:border-indigo-200 hover:text-indigo-600 shadow-sm disabled:opacity-50"
                   }`}
                 >
-                  {copied ? <Check size={16} /> : <Copy size={16} />}
-                  {copied ? "Copied" : "Copy Text"}
+                  {/* The icon will now bounce when copied! */}
+                  {copied ? (
+                    <Check
+                      size={16}
+                      className="animate-in zoom-in duration-300"
+                    />
+                  ) : (
+                    <Copy size={16} />
+                  )}
+                  {copied ? "Copied!" : "Copy Text"}
                 </button>
 
                 {/* New PDF Button added right here */}
@@ -254,7 +261,7 @@ export default function App() {
             </div>
 
             {/* Paper Container */}
-            <div className="bg-white min-h-[750px] rounded-[32px] shadow-2xl shadow-slate-200/50 border border-slate-200/60 p-10 md:p-16 relative overflow-hidden">
+            <div className="bg-white min-h-[400px] lg:min-h-[750px] rounded-[32px] shadow-2xl shadow-slate-200/50 border border-slate-200/60 p-6 md:p-16 relative overflow-hidden">
               {/* Subtle Paper Grid Overlay */}
               <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[radial-gradient(#000_1px,transparent_1px)] [background-size:20px_20px]"></div>
 
