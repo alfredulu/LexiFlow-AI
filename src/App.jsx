@@ -11,6 +11,7 @@ import {
   LayoutDashboard,
   Check,
   Zap,
+  Trash2,
 } from "lucide-react";
 import { generateContent } from "./services/aiService";
 import { jsPDF } from "jspdf";
@@ -142,6 +143,20 @@ export default function App() {
             ))
           )}
         </nav>
+        {history.length > 0 && (
+          <button
+            onClick={() => {
+              if (window.confirm("Clear all past projects?")) {
+                localStorage.removeItem("lexiflow_history");
+                setHistory([]);
+              }
+            }}
+            className="flex items-center gap-2 w-full p-3 mt-4 text-[10px] font-bold text-slate-500 hover:text-red-400 transition-colors uppercase tracking-widest border-t border-slate-800 pt-5"
+          >
+            <Trash2 size={14} />
+            Clear History
+          </button>
+        )}
 
         <div className="mt-auto p-5 bg-slate-800/40 rounded-2xl border border-slate-700/50">
           <div className="flex justify-between items-end mb-2">
@@ -165,8 +180,8 @@ export default function App() {
         <div className="lg:hidden flex items-center justify-between p-4 bg-white border-b border-slate-200 w-full">
           <h1 className="font-bold text-slate-800">LexiFlow AI</h1>
           <button
-            onClick={() => setIsSidebarOpen(true)}
-            className="p-2 bg-slate-100 rounded-lg text-slate-600"
+            onClick={() => setIsSidebarOpen(!isSidebarOpen)} // <--- This toggles between true/false
+            className="p-2 bg-slate-100 rounded-lg text-slate-600 active:bg-slate-200"
           >
             <LayoutDashboard size={20} />
           </button>
