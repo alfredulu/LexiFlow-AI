@@ -1,12 +1,12 @@
 # LexiFlow AI
 
-LexiFlow AI is a modern frontend application that generates long-form and short-form written content (blogs, eBooks, and social posts) using AI. It demonstrates how AI-powered features can be integrated into a clean, scalable, and user-focused SaaS-style interface.
+LexiFlow AI is a modern application that generates long-form and short-form written content (blogs, eBooks, and social posts) using AI. It demonstrates how AI-powered features can be integrated into a scalable and user-focused SaaS-style interface.
 
 ---
 
 ## 🚀 Why This Project Exists
 
-LexiFlow AI was built to showcase how a frontend engineer can design and implement AI-driven features beyond simple demos. The focus is on structure, usability, and clarity ensuring generated content is presented, reused, and exported effectively, reflecting patterns commonly found in production SaaS products.
+LexiFlow AI was built to showcase how AI-driven features can be designed and implemented beyond simple demos. The focus is on leveraging AI capabilities to ensure generated content is presented, reused, and exported effectively, reflecting patterns commonly found in production SaaS products.
 
 ---
 
@@ -14,17 +14,18 @@ LexiFlow AI was built to showcase how a frontend engineer can design and impleme
 
 - **Content Generation**: Create blog posts, eBooks, and social media content.
 - **AI-Powered**: Uses Google Gemini for content generation.
-- **Markdown Rendering**: Structured output for easy readability.
+- **Dynamic Prompts**: Tailored based on content type for optimal results.
 - **Session History**: Access previously generated content.
 - **One-Click Actions**: Copy to clipboard or download as PDF.
-- **Responsive UI**: Built with Tailwind CSS for a clean and modern design.
+- **Responsive UI**: Clean and modern design with Tailwind CSS.
+- **Robust API Integration**: Seamlessly integrates with Google Gemini SDK for reliable and efficient AI-powered content generation.
 
 ---
 
 ## 🛠️ Tech Stack
 
+- **API SDK**: Google Gemini SDK (`@google/genai`)
 - **Frontend**: React 18, Vite, Tailwind CSS
-- **AI SDK**: Google Gemini SDK (`@google/genai`)
 - **Utilities**: react-markdown, jsPDF, lucide-react
 
 ---
@@ -108,6 +109,7 @@ src/services/aiService.js
 - **Model**: `gemini-2.5-flash`
 - **Dynamic Prompts**: Constructed based on selected content type.
 - **Response Format**: Markdown, rendered in the UI.
+- **API Reliability**: Built with Google Gemini SDK to ensure high performance and scalability.
 
 ---
 
