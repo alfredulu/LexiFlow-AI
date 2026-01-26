@@ -6,7 +6,7 @@ LexiFlow AI is a modern frontend application that generates long-form and short-
 
 ## 🚀 Why This Project Exists
 
-LexiFlow AI was built to showcase how a frontend engineer can design and implement AI-driven features beyond simple demos. The focus is on structure, usability, and clarity—ensuring generated content is presented, reused, and exported effectively, reflecting patterns commonly found in production SaaS products.
+LexiFlow AI was built to showcase how a frontend engineer can design and implement AI-driven features beyond simple demos. The focus is on structure, usability, and clarity ensuring generated content is presented, reused, and exported effectively, reflecting patterns commonly found in production SaaS products.
 
 ---
 
