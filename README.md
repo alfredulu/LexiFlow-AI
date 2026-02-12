@@ -2,7 +2,7 @@
 
 LexiFlow AI is a modern content-generation web app that generates **blog posts**, **ebooks**, and **social content**, with a live Markdown preview, copy, and PDF export.
 
-**Live demo:** <add-your-live-url-here>
+**Live @:** [lexi-flow-ai](https://lexi-flow-ai.vercel.app/)
 
 ---
 
@@ -14,7 +14,7 @@ LexiFlow AI is a modern content-generation web app that generates **blog posts**
 - Export to PDF
 - Recent generations history (stored locally)
 
-### Why this project stands out
+### More:
 
 - Uses a server route proxy for AI requests (no browser-side API key usage)
 - Clean, product-style UI with loading states and history
