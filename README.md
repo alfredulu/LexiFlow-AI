@@ -37,13 +37,3 @@ npm run dev
 Open http://localhost:3000
 
 ---
-
-## Phase 3 — Commit + push to GitHub
-
-From inside `C:\Users\Alfred\LexiFlow-AI`:
-
-```powershell
-git add .
-git commit -m "Refactor to Next.js with server-side Gemini proxy"
-git push
-```
